@@ -7,6 +7,8 @@ and <a href="https://developer.android.com/topic/libraries/architecture/livedata
 <p>The app signs you into Google, fetches your Google photo albums using Retrofit. Clicking on an album cover photo takes you
 into the album where you can browse your photos in that album.</p>
 
+<p>The app, though not very polished, is fully functional. You can load it into Android Studio and install it on your phone.</p>
+
 <p>
 <bold>TODO:</bold><br/>
 -- pagination (using <a href="https://developer.android.com/topic/libraries/architecture/paging/">Paging Library</a>)<br/>

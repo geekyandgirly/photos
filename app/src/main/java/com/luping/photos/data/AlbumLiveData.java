@@ -25,9 +25,8 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by luping on 6/9/18.
+ * LiveData wrapping an Album, cached in a LRU cache or fetched from the network.
  */
-
 public class AlbumLiveData extends LiveData<List<MediaItem>> {
     private static final String TAG = "AlbumLiveData";
     private final GooglePhotosRestApiService service;

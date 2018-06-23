@@ -2,7 +2,6 @@ package com.luping.photos.view;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -14,6 +13,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.luping.photos.R;
 import com.luping.photos.model.Album;
 
+/**
+ * MainActivity that display a list of albums from your Google Photos. Clicking on an album
+ * cover photo will take you into the album. If you're not sign in, you'll first be directed to
+ * the LoginActivity.
+ */
 public class MainActivity extends AppCompatActivity
         implements AlbumListFragment.OnAlbumSelectedListener {
     private static final int REQUEST_CODE_SIGN_IN = 9001;

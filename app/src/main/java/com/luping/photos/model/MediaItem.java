@@ -3,9 +3,8 @@ package com.luping.photos.model;
 import com.google.gson.annotations.SerializedName;
 
 /**
- * Created by luping on 6/9/18.
+ * Data respresting a photo.
  */
-
 public class MediaItem {
     @SerializedName("id")
     private String id;

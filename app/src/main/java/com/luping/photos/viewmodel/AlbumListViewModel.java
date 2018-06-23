@@ -12,9 +12,8 @@ import com.luping.photos.model.Album;
 import java.util.List;
 
 /**
- * Created by luping on 6/9/18.
+ * ViewModel responsible for fetching list of albums.
  */
-
 public class AlbumListViewModel extends AndroidViewModel {
     private LiveData<List<Album>> albumList;
     private MutableLiveData<Album> selectedAlbumUrl = new MutableLiveData<>();

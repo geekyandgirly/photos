@@ -14,9 +14,9 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by luping on 6/12/18.
+ * List Adapter containing photos in an album. This adapter backs the RecyclerView in
+ * {@link AlbumFragment}.
  */
-
 public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.ViewHolder> {
 
     private List<MediaItem> mediaItems;

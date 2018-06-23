@@ -19,7 +19,8 @@ import com.luping.photos.model.Album;
 import com.luping.photos.viewmodel.AlbumListViewModel;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment displaying list of Albums. Clicking the cover photo of an Album will take you to
+ * the {@link AlbumFragment}.
  */
 public class AlbumListFragment extends Fragment {
     public static final String TAG = "AlbumListFragment";

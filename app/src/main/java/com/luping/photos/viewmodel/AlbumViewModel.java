@@ -11,9 +11,8 @@ import com.luping.photos.model.MediaItem;
 import java.util.List;
 
 /**
- * Created by luping on 6/9/18.
+ * ViewModel responsible for fetching photos of an given albumId.
  */
-
 public class AlbumViewModel extends AndroidViewModel {
     private AlbumLiveData photoList;
 

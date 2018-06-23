@@ -19,7 +19,7 @@ import com.luping.photos.model.Album;
 import com.luping.photos.viewmodel.AlbumViewModel;
 
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment displaying photos in an Album.
  */
 public class AlbumFragment extends Fragment {
     public static String TAG = "AlbumFragment";

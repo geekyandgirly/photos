@@ -17,9 +17,8 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 /**
- * Created by luping on 6/10/18.
+ * List adapter containing a list of Albums. This adapter backs {@link AlbumListFragment}.
  */
-
 public class AlbumListAdapter extends RecyclerView.Adapter<AlbumListAdapter.ViewHolder> {
     private static final String TAG = "AlbumListAdapter";
     private final AlbumListViewModel albumListViewModel;

@@ -17,11 +17,10 @@ import com.google.android.gms.tasks.Task;
 import com.luping.photos.R;
 
 public class LoginActivity extends AppCompatActivity {
-    static final String TAG = "SignInFragment";
+    static final String TAG = "LoginActivity";
     private static final int REQUEST_CODE_SIGN_IN = 9002;
 
     private GoogleSignInClient mGoogleSignInClient;
-    private SignInFragment.SignInCallback signInCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,9 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="200dp"
     android:layout_marginBottom="@dimen/activity_vertical_margin"
-    android:paddingBottom="8dp"
     card_view:cardElevation="4dp"
-    card_view:cardCornerRadius="6dp">
+    card_view:cardUseCompatPadding="true">
 
     <ImageView
         android:id="@+id/media_item_image"

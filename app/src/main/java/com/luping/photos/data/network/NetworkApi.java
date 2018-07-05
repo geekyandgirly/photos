@@ -9,7 +9,7 @@ import retrofit2.http.Query;
  * Created by luping on 6/9/18.
  */
 
-public interface GooglePhotosRestApiService {
+public interface NetworkApi {
     @GET("v1/albums")
     Call<AlbumsResponse> getAlbumList();
 

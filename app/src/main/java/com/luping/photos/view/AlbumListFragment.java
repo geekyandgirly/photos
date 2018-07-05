@@ -4,6 +4,7 @@ package com.luping.photos.view;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,7 +51,6 @@ public class AlbumListFragment extends Fragment {
             Log.d(TAG, "album selected: ");
             if (onAlbumSelectedListener != null && album != null) {
                 onAlbumSelectedListener.onAlbumSelected(album);
-                albumListViewModel.getSelectedAlbum().setValue(null);
             }
         });
 
@@ -64,7 +64,7 @@ public class AlbumListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_album_list, container, false);
         albumListView = rootView.findViewById(R.id.album_list);
         albumListView.setHasFixedSize(true);
-        albumListView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        albumListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         albumListView.setHasFixedSize(true);
 
         albumListView.setAdapter(albumListAdapter);

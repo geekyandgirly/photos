@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.luping.photos.R;
 import com.luping.photos.model.MediaItem;
+import com.luping.photos.viewmodel.AlbumViewModel;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -19,17 +21,22 @@ import java.util.List;
  */
 public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.ViewHolder> {
 
+    private final AlbumViewModel albumViewModel;
     private List<MediaItem> mediaItems;
 
-    MediaItemsAdapter() {
+    MediaItemsAdapter(AlbumViewModel albumViewModel) {
+        this.albumViewModel = albumViewModel;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             this.imageView = itemView.findViewById(R.id.media_item_image);
+            itemView.setOnClickListener(view -> {
+                albumViewModel.setSelectedIndex(getAdapterPosition());
+            });
         }
     }
 
@@ -45,8 +52,7 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         MediaItem item = mediaItems == null ? null : mediaItems.get(position);
         if (item != null) {
-            Picasso.get().cancelRequest(holder.imageView);
-            Picasso.get().load(item.getBaseUrl()).into(holder.imageView);
+            Glide.with(holder.itemView).load(item.getBaseUrl()).into(holder.imageView);
         }
     }
 

@@ -11,7 +11,9 @@ import com.luping.photos.data.network.MediaItemsResponse;
 import com.luping.photos.data.network.NetworkApi;
 import com.luping.photos.data.network.NetworkService;
 import com.luping.photos.model.MediaItem;
+import com.luping.photos.view.MainActivity;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +32,7 @@ public class AlbumViewModel extends AndroidViewModel {
 
     private MutableLiveData<List<MediaItem>> photoList = new MutableLiveData<>();
     private SingleLiveEvent<Integer> selectedIndex = new SingleLiveEvent<>();
+    private String nextPageToken = "";
 
     private static final int LRU_CASH_CAP = 5; // 5 albums
     private final LinkedHashMap<String, List<MediaItem>> cache =
@@ -46,9 +49,9 @@ public class AlbumViewModel extends AndroidViewModel {
     }
 
     public void loadAlbum(String albumId) {
-        if (!cache.containsKey(albumId)) {
+//        if (!cache.containsKey(albumId)) {
 
-            Call<MediaItemsResponse> call = api.getMediaItems(albumId, 20);
+            Call<MediaItemsResponse> call = api.getMediaItems(albumId, 20, nextPageToken);
             call.enqueue(new Callback<MediaItemsResponse>() {
                 @Override
                 public void onResponse(Call<MediaItemsResponse> call, Response<MediaItemsResponse> response) {
@@ -56,8 +59,14 @@ public class AlbumViewModel extends AndroidViewModel {
                         MediaItemsResponse res = response.body();
                         List<MediaItem> photos = res.getMediaItems();
                         if (photos != null) {
-                            photoList.setValue(photos);
-                            cache.put(albumId, photos);
+                            List<MediaItem> fetched = cache.get(albumId);
+                            if (fetched == null) {
+                                fetched = new ArrayList<>();
+                            }
+                            fetched.addAll(photos);
+                            photoList.postValue(fetched);
+                            nextPageToken = res.getNextPageToken();
+                            cache.put(albumId, fetched);
                         }
                     }
                 }
@@ -67,9 +76,9 @@ public class AlbumViewModel extends AndroidViewModel {
                     Log.d(TAG, "loadAlbum failed: " + t.getStackTrace());
                 }
             });
-        } else {
-            photoList.setValue(cache.get(albumId));
-        }
+//        } else {
+//            photoList.postValue(cache.get(albumId));
+//        }
     }
 
     public LiveData<List<MediaItem>> getAlbum() {

@@ -6,7 +6,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v4.view.ViewPager;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,9 @@ import android.view.ViewGroup;
 import com.luping.photos.R;
 import com.luping.photos.model.Album;
 import com.luping.photos.viewmodel.AlbumViewModel;
+
+import java.util.List;
+import java.util.Map;
 
 public class PhotoPagerFragment extends Fragment {
     static String TAG = "PhotoPagerFragment";
@@ -68,6 +74,31 @@ public class PhotoPagerFragment extends Fragment {
             }
         });
 
+        prepareSharedElementTransition();
+
+        if (savedInstanceState == null) {
+            postponeEnterTransition();
+        }
+
         return viewPager;
+    }
+
+    private void prepareSharedElementTransition() {
+        Transition transition = TransitionInflater.from(getContext())
+                .inflateTransition(R.transition.image_shared_element_transition);
+        setSharedElementEnterTransition(transition);
+
+        setEnterSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                Fragment currFragment = (Fragment) viewPager.getAdapter()
+                        .instantiateItem(viewPager, MainActivity.selectedPhotoIndex);
+                View view = currFragment.getView();
+                if (view != null) {
+                    sharedElements.put(names.get(0), view.findViewById(R.id.photo));
+                }
+            }
+        });
+
     }
 }

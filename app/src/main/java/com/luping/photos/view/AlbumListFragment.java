@@ -64,7 +64,9 @@ public class AlbumListFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_album_list, container, false);
         albumListView = rootView.findViewById(R.id.album_list);
         albumListView.setHasFixedSize(true);
-        albumListView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        linearLayoutManager.setRecycleChildrenOnDetach(true);
+        albumListView.setLayoutManager(linearLayoutManager);
         albumListView.setHasFixedSize(true);
 
         albumListView.setAdapter(albumListAdapter);

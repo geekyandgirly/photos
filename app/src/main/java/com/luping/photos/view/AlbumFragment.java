@@ -4,8 +4,10 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.SharedElementCallback;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,9 @@ import com.luping.photos.R;
 import com.luping.photos.model.Album;
 import com.luping.photos.model.MediaItem;
 import com.luping.photos.viewmodel.AlbumViewModel;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Fragment displaying photos in an Album.
@@ -69,10 +74,41 @@ public class AlbumFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_album, container, false);
         recyclerView = view.findViewById(R.id.media_items);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
+        recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setAdapter(mediaItemsAdapter);
+        recyclerView.addOnScrollListener(new InfiniteScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore() {
+                AlbumViewModel albumViewModel = ViewModelProviders.of(AlbumFragment.this).get(AlbumViewModel.class);
+                String albumId = getArguments() != null ? getArguments().getString("albumId") : null;
+                if (albumId != null) {
+                    albumViewModel.loadAlbum(albumId);
+                }
+            }
+        });
+
+        prepareTransitions();
+        postponeEnterTransition();
+
         return view;
+    }
+
+    private void prepareTransitions() {
+        setExitTransition(TransitionInflater.from(getContext())
+                .inflateTransition(R.transition.grid_exit_transition));
+
+        setExitSharedElementCallback(new SharedElementCallback() {
+            @Override
+            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
+                RecyclerView.ViewHolder selectedViewHolder = recyclerView
+                        .findViewHolderForAdapterPosition(MainActivity.selectedPhotoIndex);
+                if (selectedViewHolder != null && selectedViewHolder.itemView != null) {
+                    sharedElements.put(names.get(0), selectedViewHolder.itemView.findViewById(R.id.media_item_image));
+                }
+            }
+        });
     }
 
 }

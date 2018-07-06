@@ -3,7 +3,6 @@ package com.luping.photos.view;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +12,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.luping.photos.R;
 import com.luping.photos.model.Album;
-import com.luping.photos.model.MediaItem;
 
 /**
  * MainActivity that display a list of albums from your Google Photos. Clicking on an album

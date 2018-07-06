@@ -15,5 +15,6 @@ public interface NetworkApi {
 
     @POST("v1/mediaItems:search")
     Call<MediaItemsResponse> getMediaItems(@Query("albumId") String albumId,
-                                           @Query("pageSize") int pageSize);
+                                           @Query("pageSize") int pageSize,
+                                           @Query("pageToken") String pageToken);
 }

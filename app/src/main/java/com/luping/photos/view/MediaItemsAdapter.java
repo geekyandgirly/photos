@@ -11,7 +11,6 @@ import com.bumptech.glide.Glide;
 import com.luping.photos.R;
 import com.luping.photos.model.MediaItem;
 import com.luping.photos.viewmodel.AlbumViewModel;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

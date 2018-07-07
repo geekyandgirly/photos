@@ -2,6 +2,7 @@ package com.luping.photos.view;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.luping.photos.R;
 import com.luping.photos.model.MediaItem;
-import com.luping.photos.viewmodel.AlbumViewModel;
 
 import java.util.List;
 
@@ -20,11 +20,15 @@ import java.util.List;
  */
 public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.ViewHolder> {
 
-    private final AlbumViewModel albumViewModel;
+    public interface PhotoOnClickListener {
+        void onPhotoClicked(MediaItem item, ImageView imageView, int position);
+    }
+
+    private final PhotoOnClickListener photoOnClickListener;
     private List<MediaItem> mediaItems;
 
-    MediaItemsAdapter(AlbumViewModel albumViewModel) {
-        this.albumViewModel = albumViewModel;
+    MediaItemsAdapter(PhotoOnClickListener photoOnClickListener) {
+        this.photoOnClickListener = photoOnClickListener;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -34,7 +38,8 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Vi
             super(itemView);
             this.imageView = itemView.findViewById(R.id.media_item_image);
             itemView.setOnClickListener(view -> {
-                albumViewModel.setSelectedIndex(getAdapterPosition());
+                int position = getAdapterPosition();
+                photoOnClickListener.onPhotoClicked(getItem(position), imageView, position);
             });
         }
     }
@@ -49,8 +54,10 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        MediaItem item = mediaItems == null ? null : mediaItems.get(position);
+        MediaItem item = getItem(position);
         if (item != null) {
+            Log.d("Luping", "mediaItem id: " + item.getId());
+            holder.imageView.setTransitionName(item.getId());
             Glide.with(holder.itemView).load(item.getBaseUrl()).into(holder.imageView);
         }
     }
@@ -63,5 +70,9 @@ public class MediaItemsAdapter extends RecyclerView.Adapter<MediaItemsAdapter.Vi
     void setMediaItems(List<MediaItem> mediaItems) {
         this.mediaItems = mediaItems;
         notifyDataSetChanged();
+    }
+
+    MediaItem getItem(int position) {
+        return mediaItems == null ? null : mediaItems.get(position);
     }
 }

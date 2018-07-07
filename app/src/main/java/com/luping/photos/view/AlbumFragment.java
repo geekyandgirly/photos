@@ -3,28 +3,27 @@ package com.luping.photos.view;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.SharedElementCallback;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.TransitionInflater;
+import android.transition.TransitionSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.luping.photos.R;
 import com.luping.photos.model.Album;
 import com.luping.photos.model.MediaItem;
 import com.luping.photos.viewmodel.AlbumViewModel;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * Fragment displaying photos in an Album.
  */
-public class AlbumFragment extends Fragment {
+public class AlbumFragment extends Fragment implements MediaItemsAdapter.PhotoOnClickListener {
     public static String TAG = "AlbumFragment";
     private RecyclerView recyclerView;
     private MediaItemsAdapter mediaItemsAdapter;
@@ -55,23 +54,21 @@ public class AlbumFragment extends Fragment {
             mediaItemsAdapter.setMediaItems(albumLiveData);
         });
 
-        albumViewModel.getSelectedIndex().observe(this, selectedIndex -> {
-                Log.d(TAG, "photo selected: " + selectedIndex);
-                MainActivity.selectedPhotoIndex = selectedIndex;
-                getFragmentManager().beginTransaction()
-                    .addToBackStack("viewPager")
-                    .replace(R.id.fragment_container, PhotoPagerFragment.newInstance(albumId), PhotoPagerFragment.TAG)
-                    .commit();
-        });
+        mediaItemsAdapter = new MediaItemsAdapter(this);
 
-        mediaItemsAdapter = new MediaItemsAdapter(albumViewModel);
+        setExitTransition(TransitionInflater.from(getContext())
+                .inflateTransition(R.transition.grid_exit_transition));
     }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_album, container, false);
+        return inflater.inflate(R.layout.fragment_album, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         recyclerView = view.findViewById(R.id.media_items);
         recyclerView.setHasFixedSize(true);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
@@ -88,27 +85,19 @@ public class AlbumFragment extends Fragment {
                 }
             }
         });
-
-        prepareTransitions();
-        postponeEnterTransition();
-
-        return view;
     }
 
-    private void prepareTransitions() {
-        setExitTransition(TransitionInflater.from(getContext())
-                .inflateTransition(R.transition.grid_exit_transition));
 
-        setExitSharedElementCallback(new SharedElementCallback() {
-            @Override
-            public void onMapSharedElements(List<String> names, Map<String, View> sharedElements) {
-                RecyclerView.ViewHolder selectedViewHolder = recyclerView
-                        .findViewHolderForAdapterPosition(MainActivity.selectedPhotoIndex);
-                if (selectedViewHolder != null && selectedViewHolder.itemView != null) {
-                    sharedElements.put(names.get(0), selectedViewHolder.itemView.findViewById(R.id.media_item_image));
-                }
-            }
-        });
+    @Override
+    public void onPhotoClicked(MediaItem item, ImageView transitionView, int position) {
+//        Log.d("Luping", "getTansitionname: " + transitionView.getTransitionName());
+        ((TransitionSet) getExitTransition()).excludeTarget(transitionView, true);
+        getFragmentManager().beginTransaction()
+//                        .setReorderingAllowed(true) // setAllowOptimization before 26.1.0
+                .addSharedElement(transitionView, transitionView.getTransitionName())
+                .addToBackStack("photoDetail")
+                .replace(R.id.fragment_container, PhotoFragment.newInstance(item), PhotoFragment.TAG)
+                .commit();
+
     }
-
 }

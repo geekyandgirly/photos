@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity
         implements AlbumListFragment.OnAlbumSelectedListener {
     private static final int REQUEST_CODE_SIGN_IN = 9001;
     private static final String TAG = "MainActivity";
+
+    // Not really used right now. It's used in PhotoPagerFragment but that fragment is not used
+    // right now.
     static int selectedPhotoIndex;
 
     @Override
